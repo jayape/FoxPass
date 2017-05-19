@@ -1,0 +1,495 @@
+---
+title: "Database Space Usage"
+author: "John Pertell"
+date: "`r format(Sys.time(), '%a %b %d %Y %X')`"
+output:
+  html_document: 
+    toc: TRUE
+  
+  
+params:
+  server1: "DCICHISQL1\\MISDB"
+  server2: "DCICHISQL2\\MISDB"
+  server3: "DCICORSQL3\\MISDB"
+  server4: "DCICORSQL4\\MISDB"
+  server5: "DCICORSQL8\\REGION5"
+  db1: 'mis_db'
+  db2: 'darwin_db'
+  db3: 'dialysis_db'
+---
+
+# Introduction
+This document shows the space usage over the last year on each production data server: 
+
+  * `r params$server1`
+  * `r params$server2`   
+  * `r params$server3`   
+  * `r params$server4`  
+  * `r params$server5`    
+
+It looks at the used space by each database file for the three largest database files:  
+
+  * `r params$db1`
+  * `r params$db2`
+  * `r params$db3`
+  
+**NOTE: All sizes are in GB.**
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(RODBC)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(dygraphs)
+library(xts)
+library(quantmod)
+library(tidyr)
+library(zoo)
+
+myConn <- odbcDriverConnect("driver={SQL Server};
+                            server=PERTELL03;
+                            database=DemoDB;
+                            uid=Demoman;
+                            pwd=12345678")
+
+db_filtered <- sqlQuery(myConn, "SELECT RTRIM(ServerName) AS ServerName, PollDate, DBName, DBLogicalFileName, DBFileSizeMB, 
+                                        DBFileSizeMB - DBFreeSpaceMB AS DBUsedSpaceMB, DBFreeSpaceMB
+                                 FROM DBInfo
+                                 WHERE Servername IN ('DCICHISQL1\\MISDB', 'DCICHISQL2\\MISDB', 'DCICORSQL3\\MISDB', 'DCICORSQL4\\MISDB', 'DCICORSQL8\\REGION5')
+                                 AND DBName IN ('mis_db', 'darwin_db', 'dialysis_db')
+                                 AND PollDate >= DATEADD(year, -1, GETDATE())")
+
+drive_filtered <- sqlQuery(myConn, "SELECT DISTINCT ServerName,
+                                           CASE LEN(Drive)
+	                                           WHEN 1 THEN Drive
+		                                           ELSE SUBSTRING(Drive, 4, 1)
+                                             END AS Drive,
+                                           DriveTotalSpaceMB, DriveFreeSpaceMB, DriveFreeSpacePct, PollDate
+                                    FROM DBInfo
+                                    WHERE Servername IN ('DCICHISQL1\\MISDB', 'DCICHISQL2\\MISDB', 'DCICORSQL3\\MISDB', 'DCICORSQL4\\MISDB', 'DCICORSQL8\\REGION5') 
+                                    AND PollDate >= DATEADD(year, -1, GETDATE())")
+close(myConn)
+
+db_filtered$DBUsedSpaceGB <- (db_filtered$DBUsedSpaceMB / 1024) 
+drive_filtered$DriveUsedSpaceGB <- (drive_filtered$DriveTotalSpaceMB - drive_filtered$DriveFreeSpaceMB) / 1024
+```
+
+# `r params$server1`  
+
+## Drive Size Percent Free 
+
+```{r echo = FALSE}
+drive <- drive_filtered %>%
+          filter(ServerName == params$server1) %>%
+          group_by(Drive) %>%
+          arrange(PollDate) %>%
+          filter(row_number()==1 | row_number()==n()) %>% 
+          select(PollDate, Drive, DriveFreeSpacePct) %>%
+          spread(Drive, DriveFreeSpacePct)
+
+as.data.frame(drive)
+#ggplot(data = drive, aes(x = RunDate, y = pct_free, group = Drive )) + 
+#  geom_line(aes(color = Drive)) 
+``` 
+
+## `r params$db1`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server1, DBName == params$db1) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```  
+
+## `r params$db2`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server1, DBName == params$db2) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName))  
+
+```  
+
+## `r params$db3`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server1, DBName == params$db3) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName))  
+
+```
+
+# `r params$server2`  
+
+## Drive Size Percent Free 
+
+```{r echo = FALSE}
+drive <- drive_filtered %>%
+          filter(ServerName == params$server2) %>%
+          group_by(Drive) %>%
+          arrange(PollDate) %>%
+          filter(row_number()==1 | row_number()==n()) %>% 
+          select(PollDate, Drive, DriveFreeSpacePct) %>%
+          spread(Drive, DriveFreeSpacePct)
+
+as.data.frame(drive)
+#ggplot(data = drive, aes(x = RunDate, y = pct_free, group = Drive )) + 
+#  geom_line(aes(color = Drive)) 
+``` 
+
+## `r params$db1`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server2, DBName == params$db1) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```  
+
+## `r params$db2`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server2, DBName == params$db2) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```  
+
+## `r params$db3`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server2, DBName == params$db3) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```
+
+# `r params$server3`  
+
+## Drive Size Percent Free 
+
+```{r echo = FALSE}
+drive <- drive_filtered %>%
+          filter(ServerName == params$server3) %>%
+          group_by(Drive) %>%
+          arrange(PollDate) %>%
+          filter(row_number()==1 | row_number()==n()) %>% 
+          select(PollDate, Drive, DriveFreeSpacePct) %>%
+          spread(Drive, DriveFreeSpacePct)
+
+as.data.frame(drive)
+#ggplot(data = drive, aes(x = RunDate, y = pct_free, group = Drive )) + 
+#  geom_line(aes(color = Drive)) 
+``` 
+
+## `r params$db1`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server3, DBName == params$db1) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName))  
+
+```  
+
+## `r params$db2`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server3, DBName == params$db2) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```  
+
+## `r params$db3`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server3, DBName == params$db3) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```
+
+# `r params$server4`  
+
+## Drive Size Percent Free 
+
+```{r echo = FALSE}
+drive <- drive_filtered %>%
+          filter(ServerName == params$server4) %>%
+          group_by(Drive) %>%
+          arrange(PollDate) %>%
+          filter(row_number()==1 | row_number()==n()) %>% 
+          select(PollDate, Drive, DriveFreeSpacePct) %>%
+          spread(Drive, DriveFreeSpacePct)
+
+as.data.frame(drive)
+#ggplot(data = drive, aes(x = RunDate, y = pct_free, group = Drive )) + 
+#  geom_line(aes(color = Drive)) 
+``` 
+
+## `r params$db1`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server4, DBName == params$db1) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName))  
+
+```  
+
+## `r params$db2`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server4, DBName == params$db2) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```  
+
+## `r params$db3`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server4, DBName == params$db3) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```
+
+# `r params$server5` 
+
+## Drive Size Percent Free 
+
+```{r echo = FALSE}
+drive <- drive_filtered %>%
+          filter(ServerName == params$server5) %>%
+          group_by(Drive) %>%
+          arrange(PollDate) %>%
+          filter(row_number()==1 | row_number()==n()) %>% 
+          select(PollDate, Drive, DriveFreeSpacePct) %>%
+          spread(Drive, DriveFreeSpacePct)
+
+as.data.frame(drive)
+#ggplot(data = drive, aes(x = RunDate, y = pct_free, group = Drive )) + 
+#  geom_line(aes(color = Drive)) 
+``` 
+## `r params$db1`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server5, DBName == params$db1) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```  
+
+## `r params$db2`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server5, DBName == params$db2) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```  
+
+## `r params$db3`
+```{r echo = FALSE}
+db_plot1 <- db_filtered %>%
+  filter(ServerName == params$server5, DBName == params$db3) %>% 
+  group_by(DBName) %>%
+  arrange(PollDate) %>%
+  filter(row_number()==1 | row_number()==n()) %>% 
+  select(PollDate, DBName, DBUsedSpaceGB) %>%
+  spread(DBName, DBUsedSpaceGB)  
+
+db_plot2 <- db_filtered %>% 
+              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              group_by(DBName) 
+
+db_plot1 <- as.data.frame(db_plot1)
+db_plot1
+
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
+  geom_line(aes(color = DBName)) 
+
+```
