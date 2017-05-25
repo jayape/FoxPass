@@ -4,10 +4,9 @@ library(help = datasets)
 mydata <- iris
 head(mydata)
 
-# Read data
+# Read data from file
 myCSV <- read.csv("./Data/CHI2017.csv", header = TRUE)
-
-myCSV
+head(myCSV)
 
 # Read data from a web page
 library(XML)
@@ -27,16 +26,19 @@ library(RODBC)
 library(ggmap)
 
 myConn <- odbcDriverConnect("driver={SQL Server};
-                            server=PERTELL03;
+                            server=(local);
                             database=DemoDB;
-                            uid=Demoman;
-                            pwd=12345678")
+                            Trusted_Connection=yes")
 
 
 userData <- sqlFetch(myConn, "Locations")
-close(myConn)
+#close(myConn)
 
 map <- get_map("United State", scale = 2, zoom = 4)
 
 ggmap(map) +
   geom_point(aes(x = lon, y = lat), data = userData, alpha = .5)
+
+
+sqlSave(myConn, dat = myCSV, tablename = 'Chicago_2017', safer = TRUE, rownames = FALSE)
+close(myConn)
