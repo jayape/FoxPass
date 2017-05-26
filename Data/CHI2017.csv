@@ -1,0 +1,83 @@
+GP,Date,Loc,Opponent,GF,GA,Result,OT,tShots,tPIM,tPPG,tPPO,tSHG,oShots,oPIM,oPPG,oPPO,oSHG
+1,10/12/2016,H,St. Louis Blues,2,5,L,REG,19,10,1,4,0,33,8,3,5,0
+2,10/14/2016,A,Nashville Predators,2,3,L,REG,24,24,0,4,0,27,20,3,6,0
+3,10/15/2016,H,Nashville Predators,5,3,W,REG,27,4,2,3,0,36,6,1,2,0
+4,10/18/2016,H,Philadelphia Flyers,7,4,W,REG,28,8,2,3,0,27,6,2,4,0
+5,10/21/2016,A,Columbus Blue Jackets,2,3,L,REG,34,4,0,4,0,28,8,2,2,0
+6,10/22/2016,H,Toronto Maple Leafs,5,4,W,SO,35,4,0,6,0,34,12,1,2,0
+7,10/24/2016,H,Calgary Flames,2,3,L,SO,33,10,0,2,0,31,4,2,5,0
+8,10/28/2016,A,New Jersey Devils,3,2,W,OT,29,8,2,5,0,32,10,1,4,0
+9,10/30/2016,H,Los Angeles Kings,3,0,W,REG,29,2,2,7,0,32,14,0,2,0
+10,11/1/2016,H,Calgary Flames,5,1,W,REG,22,8,1,4,0,34,8,0,4,1
+11,11/3/2016,H,Colorado Avalanche,4,0,W,REG,21,6,0,2,0,38,4,0,3,0
+12,11/5/2016,A,Dallas Stars,3,2,W,REG,32,12,1,6,0,33,16,0,3,0
+13,11/6/2016,H,Dallas Stars,4,3,W,OT,33,8,0,4,0,35,8,1,4,1
+14,11/9/2016,A,St. Louis Blues,2,1,W,OT,30,13,0,5,0,28,15,0,3,0
+15,11/11/2016,H,Washington Capitals,2,3,L,OT,34,0,1,2,0,28,4,0,0,1
+16,11/13/2016,H,Montreal Canadiens,3,2,W,REG,35,6,0,2,0,23,6,1,2,0
+17,11/15/2016,A,Winnipeg Jets,0,4,L,REG,27,2,0,3,0,24,6,0,1,0
+18,11/18/2016,A,Calgary Flames,3,2,W,REG,24,8,1,1,0,30,2,0,5,0
+19,11/19/2016,A,Vancouver Canucks,4,3,W,OT,32,4,0,3,0,27,6,1,2,1
+20,11/21/2016,A,Edmonton Oilers,0,5,L,REG,31,8,0,2,0,27,4,2,4,0
+21,11/23/2016,A,San Jose Sharks,1,2,L,REG,34,8,0,2,0,35,6,1,4,1
+22,11/25/2016,A,Anaheim Ducks,3,2,W,REG,25,4,1,2,0,36,4,0,2,0
+23,11/26/2016,A,Los Angeles Kings,1,2,L,OT,19,6,0,3,0,29,6,0,3,0
+24,11/29/2016,H,Florida Panthers,2,1,W,SO,33,6,0,2,0,39,4,1,3,0
+25,12/1/2016,H,New Jersey Devils,4,3,W,OT,33,4,0,4,0,33,8,1,2,0
+26,12/3/2016,A,Philadelphia Flyers,1,3,L,REG,27,4,0,1,0,30,0,0,3,0
+27,12/4/2016,H,Winnipeg Jets,1,2,L,REG,26,9,0,3,0,32,11,1,2,0
+28,12/6/2016,H,Arizona Coyotes,4,0,W,REG,27,4,1,3,0,22,6,0,2,0
+29,12/9/2016,H,New York Rangers,0,1,L,OT,26,4,0,1,0,37,2,0,2,0
+30,12/11/2016,H,Dallas Stars,3,1,W,REG,27,4,1,3,0,24,6,0,2,0
+31,12/13/2016,A,New York Rangers,2,1,W,REG,26,0,0,1,0,34,4,0,0,0
+32,12/15/2016,A,New York Islanders,5,4,W,REG,32,4,3,3,0,32,6,0,2,0
+33,12/17/2016,A,St. Louis Blues,6,4,W,REG,36,2,0,3,0,27,8,0,0,0
+34,12/18/2016,H,San Jose Sharks,4,1,W,REG,26,4,0,2,0,34,4,0,2,0
+35,12/20/2016,H,Ottawa Senators,3,4,L,REG,26,10,1,3,0,30,6,1,5,0
+36,12/23/2016,H,Colorado Avalanche,1,2,L,OT,39,4,1,4,0,34,10,0,1,0
+37,12/27/2016,H,Winnipeg Jets,1,3,L,REG,35,2,0,3,0,34,6,0,1,0
+38,12/29/2016,A,Nashville Predators,3,2,W,REG,23,10,2,5,0,38,10,1,4,0
+39,12/30/2016,A,Carolina Hurricanes,2,3,L,REG,29,2,0,1,0,28,2,0,1,0
+40,1/2/2017,A,St. Louis Blues,1,4,L,REG,23,8,0,3,0,35,6,0,4,0
+41,1/5/2017,H,Buffalo Sabres,4,3,W,OT,43,4,0,2,0,20,4,2,3,0
+42,1/6/2017,H,Carolina Hurricanes,2,1,W,REG,24,6,1,3,0,40,6,0,3,0
+43,1/8/2017,H,Nashville Predators,5,2,W,REG,31,4,0,1,0,27,2,0,3,0
+44,1/10/2017,H,Detroit Red Wings,4,3,W,OT,43,4,2,6,0,36,14,0,1,0
+45,1/13/2017,A,Washington Capitals,0,6,L,REG,24,0,0,2,0,34,4,0,0,0
+46,1/15/2017,H,Minnesota Wild,2,3,L,REG,35,4,0,2,0,32,6,1,1,0
+47,1/17/2017,A,Colorado Avalanche,6,4,W,REG,27,6,0,1,0,23,4,1,2,0
+48,1/20/2017,A,Boston Bruins,1,0,W,REG,22,4,0,3,0,30,6,0,2,0
+49,1/22/2017,H,Vancouver Canucks,4,2,W,REG,35,6,0,1,0,28,2,1,3,0
+50,1/24/2017,H,Tampa Bay Lightning,2,5,L,REG,36,4,0,3,0,36,16,0,2,0
+51,1/26/2017,H,Winnipeg Jets,3,5,L,REG,41,10,1,5,0,33,10,1,5,0
+52,1/31/2017,A,San Jose Sharks,1,3,L,REG,25,6,0,3,0,29,6,1,3,0
+53,2/2/2017,A,Arizona Coyotes,4,3,W,REG,26,19,2,4,0,27,27,1,5,0
+54,2/4/2017,A,Dallas Stars,5,3,W,REG,36,11,1,2,0,34,9,0,3,0
+55,2/8/2017,A,Minnesota Wild,4,3,W,OT,32,6,1,2,0,38,6,0,2,0
+56,2/10/2017,A,Winnipeg Jets,5,2,W,REG,36,6,0,2,1,30,4,1,3,0
+57,2/11/2017,A,Edmonton Oilers,5,1,W,REG,25,19,2,2,0,31,29,0,2,0
+58,2/18/2017,H,Edmonton Oilers,1,3,L,REG,39,19,0,3,0,22,11,1,2,0
+59,2/19/2017,A,Buffalo Sabres,5,1,W,REG,37,8,0,3,0,26,6,0,4,0
+60,2/21/2017,A,Minnesota Wild,5,3,W,REG,39,4,0,2,0,32,4,2,2,0
+61,2/23/2017,H,Arizona Coyotes,6,3,W,REG,29,8,0,2,0,37,4,0,4,0
+62,2/26/2017,H,St. Louis Blues,4,2,W,REG,42,4,1,2,0,32,4,1,2,0
+63,3/1/2017,H,Pittsburgh Penguins,4,1,W,REG,29,0,0,1,0,37,2,0,0,0
+64,3/3/2017,H,New York Islanders,2,1,W,SO,31,6,0,2,0,32,4,0,3,0
+65,3/4/2017,A,Nashville Predators,5,3,W,REG,33,7,2,2,0,35,9,0,1,0
+66,3/9/2017,H,Anaheim Ducks,0,1,L,REG,43,11,0,2,0,26,21,0,2,0
+67,3/10/2017,A,Detroit Red Wings,2,4,L,REG,26,23,0,2,0,29,11,0,3,0
+68,3/12/2017,H,Minnesota Wild,4,2,W,REG,22,2,0,3,0,44,6,0,1,0
+69,3/14/2017,A,Montreal Canadiens,4,2,W,REG,24,4,0,1,0,42,2,0,2,0
+70,3/16/2017,A,Ottawa Senators,2,1,W,REG,28,10,1,4,0,34,10,1,4,0
+71,3/18/2017,A,Toronto Maple Leafs,2,1,W,OT,39,2,0,0,0,26,0,0,1,0
+72,3/19/2017,H,Colorado Avalanche,6,3,W,REG,34,0,0,1,0,25,2,0,0,0
+73,3/21/2017,H,Vancouver Canucks,4,5,L,OT,44,4,2,6,0,15,10,1,2,0
+74,3/23/2017,H,Dallas Stars,3,2,W,SO,26,11,1,4,0,44,13,0,3,0
+75,3/25/2017,A,Florida Panthers,0,7,L,REG,25,34,0,3,0,31,30,1,5,0
+76,3/27/2017,A,Tampa Bay Lightning,4,5,L,OT,32,6,0,3,0,30,6,2,3,0
+77,3/29/2017,A,Pittsburgh Penguins,5,1,W,REG,36,4,0,4,0,32,8,0,2,0
+78,3/31/2017,H,Columbus Blue Jackets,3,1,W,REG,24,10,1,3,0,33,8,0,4,0
+79,4/2/2017,H,Boston Bruins,2,3,L,REG,43,2,0,3,0,29,6,1,1,0
+80,4/4/2017,A,Colorado Avalanche,3,4,L,OT,27,8,1,3,0,51,6,0,4,2
+81,4/6/2017,A,Anaheim Ducks,0,4,L,REG,37,8,0,3,0,26,16,1,3,0
+82,4/8/2017,A,Los Angeles Kings,2,3,L,OT,27,4,0,3,0,26,6,1,2,0
