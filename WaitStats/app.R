@@ -35,8 +35,11 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  myConn <- odbcConnect("WaitStats;")
-  ws <- sqlFetch(myConn, "WaitStats")
+  myConn <- odbcDriverConnect("driver={SQL Server};
+                               server=(local);
+                               database=DemoDB;
+                               Trusted_Connection=yes")
+  ws <- sqlFetch(myConn, "MonthlyWaitStats")
   close(myConn)
   
   data <- reactive ({

@@ -48,10 +48,9 @@ library(tidyr)
 library(zoo)
 
 myConn <- odbcDriverConnect("driver={SQL Server};
-                            server=PERTELL03;
+                            server=(local);
                             database=DemoDB;
-                            uid=Demoman;
-                            pwd=12345678")
+                            Trusted_Connection=yes")
 
 db_filtered <- sqlQuery(myConn, "SELECT RTRIM(ServerName) AS ServerName, PollDate, DBName, DBLogicalFileName, DBFileSizeMB, 
                                         DBFileSizeMB - DBFreeSpaceMB AS DBUsedSpaceMB, DBFreeSpaceMB
@@ -97,11 +96,11 @@ as.data.frame(drive)
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server1, DBName == params$db1) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB) 
 
 db_plot2 <- db_filtered %>% 
               filter(ServerName == params$server1, DBName == params$db1) %>% 
@@ -110,8 +109,8 @@ db_plot2 <- db_filtered %>%
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```  
 
@@ -119,21 +118,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server1, DBName == params$db2) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)  
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server1, DBName == params$db2) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName))  
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName))  
 
 ```  
 
@@ -141,21 +140,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server1, DBName == params$db3) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)  
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server1, DBName == params$db3) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName))  
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName))  
 
 ```
 
@@ -181,21 +180,21 @@ as.data.frame(drive)
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server2, DBName == params$db1) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server2, DBName == params$db1) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```  
 
@@ -203,21 +202,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server2, DBName == params$db2) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server2, DBName == params$db2) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```  
 
@@ -225,21 +224,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server2, DBName == params$db3) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server2, DBName == params$db3) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```
 
@@ -265,21 +264,21 @@ as.data.frame(drive)
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server3, DBName == params$db1) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB) 
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server3, DBName == params$db1) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName))  
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName))  
 
 ```  
 
@@ -287,21 +286,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server3, DBName == params$db2) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)  
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server3, DBName == params$db2) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```  
 
@@ -309,21 +308,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server3, DBName == params$db3) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)  
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server3, DBName == params$db3) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```
 
@@ -349,21 +348,21 @@ as.data.frame(drive)
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server4, DBName == params$db1) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)  
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server4, DBName == params$db1) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName))  
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName))  
 
 ```  
 
@@ -371,21 +370,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server4, DBName == params$db2) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)  
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server4, DBName == params$db2) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```  
 
@@ -393,21 +392,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server4, DBName == params$db3) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server4, DBName == params$db3) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```
 
@@ -432,21 +431,21 @@ as.data.frame(drive)
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server5, DBName == params$db1) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB) 
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server5, DBName == params$db1) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```  
 
@@ -454,21 +453,21 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server5, DBName == params$db2) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB)  
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server5, DBName == params$db2) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```  
 
@@ -476,20 +475,20 @@ ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) +
 ```{r echo = FALSE}
 db_plot1 <- db_filtered %>%
   filter(ServerName == params$server5, DBName == params$db3) %>% 
-  group_by(DBName) %>%
+  group_by(DBLogicalFileName) %>%
   arrange(PollDate) %>%
   filter(row_number()==1 | row_number()==n()) %>% 
-  select(PollDate, DBName, DBUsedSpaceGB) %>%
-  spread(DBName, DBUsedSpaceGB)  
+  select(PollDate, DBLogicalFileName, DBUsedSpaceGB) %>%
+  spread(DBLogicalFileName, DBUsedSpaceGB) 
 
 db_plot2 <- db_filtered %>% 
-              filter(ServerName == params$server1, DBName == params$db1) %>% 
+              filter(ServerName == params$server5, DBName == params$db3) %>% 
               group_by(DBName) 
 
 db_plot1 <- as.data.frame(db_plot1)
 db_plot1
 
-ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBName )) + 
-  geom_line(aes(color = DBName)) 
+ggplot(data = db_plot2, aes(x = PollDate, y = DBUsedSpaceGB, group = DBLogicalFileName )) + 
+  geom_line(aes(color = DBLogicalFileName)) 
 
 ```
