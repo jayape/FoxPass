@@ -59,13 +59,8 @@ db_filtered <- sqlQuery(myConn, "SELECT RTRIM(ServerName) AS ServerName, PollDat
                                  AND DBName IN ('mis_db', 'darwin_db', 'dialysis_db')
                                  AND PollDate >= DATEADD(year, -1, GETDATE())")
 
-drive_filtered <- sqlQuery(myConn, "SELECT DISTINCT ServerName,
-                                           CASE LEN(Drive)
-	                                           WHEN 1 THEN Drive
-		                                           ELSE SUBSTRING(Drive, 4, 1)
-                                             END AS Drive,
-                                           DriveTotalSpaceMB, DriveFreeSpaceMB, DriveFreeSpacePct, PollDate
-                                    FROM DBInfo
+drive_filtered <- sqlQuery(myConn, "SELECT ServerName, Drive, DriveTotalSpaceMB, DriveFreeSpaceMB, DriveFreeSpacePct, PollDate
+                                    FROM DSInfo
                                     WHERE Servername IN ('DCICHISQL1\\MISDB', 'DCICHISQL2\\MISDB', 'DCICORSQL3\\MISDB', 'DCICORSQL4\\MISDB', 'DCICORSQL8\\REGION5') 
                                     AND PollDate >= DATEADD(year, -1, GETDATE())")
 close(myConn)
