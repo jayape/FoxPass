@@ -141,6 +141,7 @@ remove.packages("abc")
 # Working directory
 getwd()
 setwd("C:/R Sessions")
+setwd("C:/Users/John/Documents/GitHub/FoxPass")
 
 # Functions
 celcius <- function(f) {
@@ -152,7 +153,7 @@ howhot <- celcius(75)
 howhot
 
 rm(celcius)
-source('./MyFunctions.r')
+source("./MyFunctions.r")
 
 howhot <- celcius(75)
 howhot
