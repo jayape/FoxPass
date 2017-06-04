@@ -16,7 +16,7 @@ GO
 EXECUTE sp_execute_external_script
 	@language = N'R',
 	@script = N'
-	myData <- read.csv(''C:/R Sessions/Data/NHL2016.csv'', header = TRUE)
+	myData <- read.csv(''C:/R Sessions/Data/NHL2017.csv'', header = TRUE)
 	Output <- str(myData)'
 WITH RESULT SETS UNDEFINED;
 GO
