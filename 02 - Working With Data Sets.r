@@ -84,17 +84,18 @@ max(chi2017$GF)
 median(chi2017$GF)
 summary(chi2017$GF)
 summary(chi2017)
+table(chi2017$GF)
 aggregate(GF ~ Result, chi2017, mean)
 aggregate(cbind(GF, GA, tS, oS, tPIM, oPIM, tPPG, oPPG) ~ Result + Loc, chi2017, mean)
 aggregate(cbind(GF, GA, tS, oS, tPIM, oPIM, tPPG, oPPG) ~ Opponent, chi2017, mean)
 var(chi2017$GF)
 sd(chi2017$GF)
 cor(chi2017$tS, chi2017$GF)
-lm(GF ~ GA, chi2017)
+lm(tS ~ GF, chi2017)
 
-ggplot(chi2017, aes(x = GF, y = GA)) +
+ggplot(chi2017, aes(x = tS, y = GF)) +
   geom_point() +
-  geom_smooth(method = "lm") + labs(x = "Goals For", y = "Goals Against")
+  geom_smooth(method = "lm") + labs(x = "Shots Taken", y = "Goals For")
 
 par(mfrow=c(2,2))
 hist(chi2017$GF[chi2017$Loc == "H"], freq=F, col = "lightblue", main = "Home Goals Scored", xlab = "Number of Goals")

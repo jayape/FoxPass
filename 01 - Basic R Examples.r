@@ -128,6 +128,20 @@ df <- cbind(df,Col4)
 df <- rbind(df, c(11,21,31, 41))
 df
 
+# NA and NULL values
+c <- c(1,2,NA, 4,5,NA)
+c
+is.na(c)
+mean(c)
+mean(c, na.rm = TRUE)
+
+d <- c(1, 2, NULL, 4, 5, NULL)
+d
+is.null(d)
+e <- NULL
+is.null(e)
+mean(d)
+
 # Packages
 search()
 View(installed.packages())
